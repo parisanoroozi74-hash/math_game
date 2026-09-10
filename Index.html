@@ -315,3 +315,216 @@ document.getElementById("answer").value="";
 document.getElementById("message").innerHTML="";
 
 }
+function checkAnswer(){
+
+let userAnswer=document.getElementById("answer").value;
+
+if(userAnswer==""){
+alert("پاسخ را وارد کن");
+return;
+}
+
+let message=document.getElementById("message");
+
+if(Number(userAnswer)===answer){
+
+correct++;
+
+score+=10;
+
+message.innerHTML="🎉 آفرین! پاسخ درست بود";
+
+message.className="good";
+
+playGoodSound();
+
+}else{
+
+wrong++;
+
+lives--;
+
+message.innerHTML=
+"😔 اشتباه بود! پاسخ درست: "+answer;
+
+message.className="bad";
+
+playBadSound();
+
+}
+
+document.getElementById("score").innerHTML=score;
+
+document.getElementById("lives").innerHTML=
+"❤️".repeat(lives)+"🖤".repeat(3-lives);
+
+document.getElementById("correct").innerHTML=correct;
+
+document.getElementById("wrong").innerHTML=wrong;
+
+setTimeout(function(){
+
+if(lives<=0){
+
+finishGame();
+
+return;
+
+}
+
+if(stage>=totalStages){
+
+finishGame();
+
+return;
+
+}
+
+stage++;
+
+newQuestion();
+
+},1500);
+
+}
+
+
+function playGoodSound(){
+
+try{
+
+let audio=new Audio(
+"https://actions.google.com/sounds/v1/cartoon/clang_and_wobble.ogg"
+);
+
+audio.play();
+
+}catch(e){}
+
+}
+
+
+function playBadSound(){
+
+try{
+
+let audio=new Audio(
+"https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"
+);
+
+audio.play();
+
+}catch(e){}
+
+}
+
+
+function finishGame(){
+
+document.getElementById("game").classList.add("hidden");
+
+document.getElementById("finish").classList.remove("hidden");
+
+document.getElementById("finalName").innerHTML=
+"آفرین "+studentName+"!";
+
+document.getElementById("finalScore").innerHTML=
+score+" امتیاز ⭐";
+
+if(stage>=totalStages){
+
+document.getElementById("finalMessage").innerHTML=
+"🚀🏆 تبریک! تو هر ۱۵۰ مرحله را انجام دادی!";
+
+}else{
+
+document.getElementById("finalMessage").innerHTML=
+"💪 بازی تمام شد! دوباره تلاش کن و رکوردت را بهتر کن.";
+
+}
+
+saveRecord();
+
+showRecords();
+
+}
+
+
+function saveRecord(){
+
+let records=
+JSON.parse(localStorage.getItem("mathRecords")||"[]");
+
+records.push({
+
+name:studentName,
+
+score:score,
+
+stage:stage
+
+});
+
+records.sort(function(a,b){
+
+return b.score-a.score;
+
+});
+
+records=records.slice(0,10);
+
+localStorage.setItem(
+"mathRecords",
+JSON.stringify(records)
+);
+
+}
+
+
+function showRecords(){
+
+let records=
+JSON.parse(localStorage.getItem("mathRecords")||"[]");
+
+let html="<h2>🏆 جدول رکوردها</h2>";
+
+html+="<div class='stats'>";
+
+for(let i=0;i<records.length;i++){
+
+html+="<div class='card'>";
+
+html+=(i+1)+"️⃣ "+records[i].name;
+
+html+="<br>⭐ "+records[i].score;
+
+html+="<br>مرحله "+records[i].stage;
+
+html+="</div>";
+
+}
+
+html+="</div>";
+
+document.getElementById("finish").innerHTML+=html;
+
+}
+
+
+document
+.getElementById("answer")
+.addEventListener("keydown",function(e){
+
+if(e.key==="Enter"){
+
+checkAnswer();
+
+}
+
+});
+
+</script>
+
+</body>
+
+</html>
