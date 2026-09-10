@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ماموریت بزرگ جمع و تفریق</title>
+
+<style>
+body{
+margin:0;
+font-family:tahoma,Arial;
+background:linear-gradient(135deg,#06152f,#123d66);
+color:white;
+min-height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+padding:15px;
+}
+
+.box{
+width:95%;
+max-width:700px;
+background:#09213d;
+border-radius:25px;
+padding:25px;
+box-shadow:0 0 30px #000;
+text-align:center;
+}
+
+h1{
+color:#ffd21c;
+}
+
+input{
+width:90%;
+padding:15px;
+font-size:18px;
+border-radius:15px;
+border:none;
+margin:10px;
+}
+
+button{
+background:#18b9ff;
+border:none;
+border-radius:15px;
+padding:15px 30px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin:15px 0;
+}
+
+.card{
+background:#12365b;
+padding:10px;
+border-radius:15px;
+}
+
+.question{
+font-size:45px;
+margin:30px;
+color:#fff;
+}
+
+.hidden{
+display:none;
+}
+
+.good{
+color:#55ff99;
+}
+
+.bad{
+color:#ff7777;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="box">
+
+<div id="start">
+
+<p>آموزگار: خانم نوروزی</p>
+<p>دبستان هور</p>
+
+<h1>🚀 ماموریت جمع و تفریق</h1>
+
+<input id="name" placeholder="نام دانش آموز">
+
+<br>
+
+<button onclick="startGame()">شروع بازی</button>
+
+</div>
