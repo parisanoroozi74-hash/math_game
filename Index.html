@@ -103,3 +103,215 @@ color:#ff7777;
 <button onclick="startGame()">شروع بازی</button>
 
 </div>
+<div id="game" class="hidden">
+
+<p id="welcome"></p>
+
+<div class="stats">
+
+<div class="card">
+مرحله
+<h2 id="stage">1</h2>
+</div>
+
+<div class="card">
+امتیاز
+<h2 id="score">0</h2>
+</div>
+
+<div class="card">
+جان
+<h2 id="lives">❤️❤️❤️</h2>
+</div>
+
+<div class="card">
+درست
+<h2 id="correct">0</h2>
+</div>
+
+<div class="card">
+اشتباه
+<h2 id="wrong">0</h2>
+</div>
+
+<div class="card">
+از ۱۵۰
+<h2>🏆</h2>
+</div>
+
+</div>
+
+<p id="levelText"></p>
+
+<div class="question" id="question">
+</div>
+
+<input
+id="answer"
+type="number"
+placeholder="پاسخ را بنویس"
+>
+
+<br>
+
+<button onclick="checkAnswer()">
+ثبت پاسخ ✓
+</button>
+
+<p id="message"></p>
+
+</div>
+
+
+<div id="finish" class="hidden">
+
+<h1>🏆 پایان بازی</h1>
+
+<h2 id="finalName"></h2>
+
+<h1 id="finalScore"></h1>
+
+<p>امتیاز نهایی</p>
+
+<h2 id="finalMessage"></h2>
+
+<button onclick="location.reload()">
+🔄 بازی دوباره
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+let studentName="";
+let stage=1;
+let score=0;
+let lives=3;
+let correct=0;
+let wrong=0;
+let answer=0;
+
+const totalStages=150;
+
+function random(min,max){
+return Math.floor(Math.random()*(max-min+1))+min;
+}
+
+function startGame(){
+
+studentName=document.getElementById("name").value.trim();
+
+if(studentName==""){
+alert("لطفاً نام دانش آموز را وارد کن");
+return;
+}
+
+document.getElementById("start").classList.add("hidden");
+
+document.getElementById("game").classList.remove("hidden");
+
+document.getElementById("welcome").innerHTML=
+"سلام "+studentName+"! 🚀";
+
+newQuestion();
+
+}
+
+function newQuestion(){
+
+let a;
+let b;
+let operation;
+
+if(stage<=12){
+
+a=random(1,9);
+b=random(1,9);
+
+operation=Math.random()<0.5?"+":"-";
+
+if(operation=="-" && b>a){
+let temp=a;
+a=b;
+b=temp;
+}
+
+document.getElementById("levelText").innerHTML=
+"مرحله ساده: یک رقم با یک رقم";
+
+}
+
+else if(stage<=40){
+
+a=random(10,99);
+b=random(1,9);
+
+operation=Math.random()<0.5?"+":"-";
+
+if(operation=="-" && b>a){
+let temp=a;
+a=b;
+b=temp;
+}
+
+document.getElementById("levelText").innerHTML=
+"دو رقم با یک رقم";
+
+}
+
+else if(stage<=100){
+
+a=random(10,99);
+b=random(10,99);
+
+operation=Math.random()<0.5?"+":"-";
+
+if(operation=="-" && b>a){
+let temp=a;
+a=b;
+b=temp;
+}
+
+document.getElementById("levelText").innerHTML=
+"دو رقم با دو رقم";
+
+}
+
+else{
+
+a=random(10,99);
+b=random(100,999);
+
+operation=Math.random()<0.5?"+":"-";
+
+if(operation=="-" && b>a){
+let temp=a;
+a=b;
+b=temp;
+}
+
+document.getElementById("levelText").innerHTML=
+"دو رقم با سه رقم 🚀";
+
+}
+
+if(operation=="+"){
+answer=a+b;
+}
+
+else{
+answer=a-b;
+}
+
+document.getElementById("question").innerHTML=
+a+" "+operation+" "+b+" = ؟";
+
+document.getElementById("stage").innerHTML=stage;
+
+document.getElementById("answer").value="";
+
+document.getElementById("message").innerHTML="";
+
+}
