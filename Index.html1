@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بازی ضرب و تقسیم - دبستان هور</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        font-family: Tahoma, Arial, sans-serif;
+    }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+            radial-gradient(circle at 10% 20%, #fff 0 25px, transparent 26px),
+            radial-gradient(circle at 90% 15%, #fff 0 35px, transparent 36px),
+            linear-gradient(135deg, #61c8ff, #9be7ff 45%, #ffe680);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .game {
+        width: 100%;
+        max-width: 760px;
+        background: rgba(255,255,255,.95);
+        border: 5px solid #174ea6;
+        border-radius: 30px;
+        box-shadow: 0 15px 40px rgba(0,0,0,.2);
+        overflow: hidden;
+    }
+
+    header {
+        background: linear-gradient(135deg, #174ea6, #2388e8);
+        color: white;
+        text-align: center;
+        padding: 20px;
+        position: relative;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 32px;
+    }
+
+    header h2 {
+        margin: 8px 0 0;
+        font-size: 20px;
+    }
+
+    .rocket {
+        font-size: 45px;
+        position: absolute;
+        left: 25px;
+        top: 15px;
+        animation: fly 2s infinite alternate;
+    }
+
+    @keyframes fly {
+        from { transform: translateY(0) rotate(-10deg); }
+        to { transform: translateY(-10px) rotate(10deg); }
+    }
+
+    .content {
+        padding: 25px;
+    }
+
+    .screen {
+        display: none;
+    }
+
+    .screen.active {
+        display: block;
+    }
+
+    .welcome {
+        text-align: center;
+    }
+
+    .welcome .hero {
+        font-size: 70px;
+    }
+
+    .welcome h3 {
+        color: #174ea6;
+        font-size: 28px;
+        margin: 10px;
+    }
+
+    input {
+        width: 100%;
+        max-width: 430px;
+        padding: 15px;
+        border: 3px solid #2388e8;
+        border-radius: 15px;
+        font-size: 20px;
+        text-align: center;
+        outline: none;
+        margin: 15px auto;
+        display: block;
+    }
+
+    input:focus {
+        border-color: #174ea6;
+    }
+
+    button {
+        border: none;
+        border-radius: 15px;
+        padding: 14px 28px;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+        background: #ffb703;
+        color: #17324d;
+        box-shadow: 0 5px 0 #d98c00;
+        transition: .15s;
+    }
+
+    button:hover {
+        transform: translateY(-2px);
+    }
+
+    button:active {
+        transform: translateY(3px);
+        box-shadow: 0 2px 0 #d98c00;
+    }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .stat {
+        background: #eaf7ff;
+        border: 2px solid #7bc8f6;
+        border-radius: 15px;
+        padding: 12px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .stat-number {
+        display: block;
+        font-size: 24px;
+        margin-top: 5px;
+    }
+
+    .progress {
+        width: 100%;
+        height: 15px;
+        background: #d8eaf4;
+        border-radius: 20px;
+        overflow: hidden;
+        margin-bottom: 25px;
+    }
+
+    .progress-bar {
+        width: 0%;
+        height: 100%;
+        background: linear-gradient(90deg,#174ea6,#00b4d8,#52b788);
+        transition: width .3s;
+    }
+
+    .question-box {
+        background: linear-gradient(135deg,#f0fbff,#fff9d9);
+        border: 3px solid #2388e8;
+        border-radius: 25px;
+        padding: 25px;
+        text-align: center;
+    }
+
+    .question-title {
+        color: #555;
+        font-size: 18px;
+    }
+
+    .question {
+        direction: ltr;
+        font-size: 58px;
+        font-weight: 900;
+        color: #174ea6;
+        margin: 20px 0;
+    }
+
+    .answer {
+        max-width: 250px;
+        font-size: 30px;
+        font-weight: bold;
+    }
+
+    .message {
+        min-height: 45px;
+        font-size: 21px;
+        font-weight: bold;
+        margin-top: 15px;
+    }
+
+    .correct {
+        color: #16803c;
+    }
+
+    .wrong {
+        color: #d62828;
+    }
+
+    .finish {
+        text-align: center;
+    }
+
+    .finish .trophy {
+        font-size: 90px;
+    }
+
+    .finish h3 {
+        color: #174ea6;
+        font-size: 32px;
+    }
+
+    .final-score {
+        font-size: 45px;
+        color: #e09b00;
+        font-weight: bold;
+    }
+
+    .records {
+        margin-top: 25px;
+        background: #f4fbff;
+        border: 2px solid #a7d8f5;
+        border-radius: 20px;
+        padding: 15px;
+    }
+
+    .records h3 {
+        text-align: center;
+        color: #174ea6;
+        margin-top: 5px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    th, td {
+        padding: 10px 5px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+
+    th {
+        background: #174ea6;
+        color: white;
+    }
+
+    .empty {
+        color: #777;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .instructions {
+        margin-top: 15px;
+        color: #555;
+        font-size: 14px;
+    }
+
+    @media(max-width:600px) {
+        body {
+            padding: 8px;
+        }
+
+        header h1 {
+            font-size: 25px;
+        }
+
+        .rocket {
+            display: none;
+        }
+
+        .content {
+            padding: 15px;
+        }
+
+        .question {
+            font-size: 43px;
+        }
+
+        .stats {
+            gap: 5px;
+        }
+
+        .stat {
+            padding: 8px 3px;
+            font-size: 13px;
+        }
+
+        .stat-number {
+            font-size: 19px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+<header>
+    <div class="rocket">🚀</div>
+    <h1>🏫 دبستان هور</h1>
+    <h2>👩‍🏫 خانم نوروزی</h2>
+</header>
+
+<div class="content">
+
+<!-- صفحه شروع -->
+<section id="startScreen" class="screen active">
+
+    <div class="welcome">
+
+        <div class="hero">🚀🧮⭐</div>
+
+        <h3>قهرمان جدول ضرب و تقسیم!</h3>
+
+        <p>
+            آماده‌ای ۱۵۰ مرحله را پشت سر بگذاری؟
+            <br>
+            هر پاسخ درست <b>۱۰ امتیاز</b> دارد.
+        </p>
+
+        <input
+            id="playerName"
+            type="text"
+            maxlength="30"
+            placeholder="نام دانش‌آموز را وارد کنید"
+        >
+
+        <button onclick="startGame()">
+            🎮 شروع بازی
+        </button>
+
+        <p class="instructions">
+            ✨ ضرب و تقسیم‌های مربوط به جدول ضرب
+            <br>
+            ❤️ سه جان داری
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- صفحه بازی -->
+<section id="gameScreen" class="screen">
+
+    <div class="stats">
+
+        <div class="stat">
+            🎯 مرحله
+            <span class="stat-number" id="stage">1 / 150</span>
+        </div>
+
+        <div class="stat">
+            ⭐ امتیاز
+            <span class="stat-number" id="score">0</span>
+        </div>
+
+        <div class="stat">
+            ❤️ جان
+            <span class="stat-number" id="lives">❤️❤️❤️</span>
+        </div>
+
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="question-box">
+
+        <div class="question-title">
+            پاسخ را ذهنی حساب کن!
+        </div>
+
+        <div class="question" id="question">
+            ۳ × ۴ = ؟
+        </div>
+
+        <input
+            id="answer"
+            class="answer"
+            type="number"
+            inputmode="numeric"
+            placeholder="پاسخ"
+            onkeydown="handleEnter(event)"
+        >
+
+        <br>
+
+        <button onclick="checkAnswer()">
+            ✔️ ثبت پاسخ
+        </button>
+
+        <div id="message" class="message"></div>
+
+    </div>
+
+</section>
+
+
+<!-- صفحه پایان -->
+<section id="finishScreen" class="screen">
+
+    <div class="finish">
+
+        <div class="trophy">🏆</div>
+
+        <h3 id="finishTitle">
+            آفرین قهرمان!
+        </h3>
+
+        <p id="finishMessage"></p>
+
+        <div class="final-score" id="finalScore">
+            0
+        </div>
+
+        <p>امتیاز نهایی</p>
+
+        <button onclick="restartGame()">
+            🔄 بازی دوباره
+        </button>
+
+    </div>
+
+</section>
+
+
+<!-- رکوردها -->
+<div class="records">
+
+    <h3>🏅 جدول رکوردها</h3>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>رتبه</th>
+                <th>نام</th>
+                <th>امتیاز</th>
+                <th>مرحله</th>
+            </tr>
+        </thead>
+
+        <tbody id="recordsBody">
+        </tbody>
+
+    </table>
+
+</div>
+
+</div>
+</div>
+
+
+<script>
+
+const TOTAL_STAGES = 150;
+
+let playerName = "";
+let stage = 1;
+let score = 0;
+let lives = 3;
+let currentAnswer = 0;
+
+let questions = [];
+let records = [];
+
+
+/* ساخت سوالات */
+function createQuestions() {
+
+    let list = [];
+
+    /*
+       ضرب:
+       1×1 تا 9×9
+    */
+
+    for (let a = 1; a <= 9; a++) {
+
+        for (let b = 1; b <= 9; b++) {
+
+            list.push({
+                text: `${a} × ${b} = ؟`,
+                answer: a * b
+            });
+
+        }
+
+    }
+
+
+    /*
+       تقسیم:
+       حاصل تقسیم همیشه عدد صحیح و
+       مربوط به جدول ضرب است.
+    */
+
+    for (let a = 1; a <= 9; a++) {
+
+        for (let b = 1; b <= 9; b++) {
+
+            list.push({
+                text: `${a * b} ÷ ${b} = ؟`,
+                answer: a
+            });
+
+        }
+
+    }
+
+
+    /*
+       سوال‌ها به صورت تصادفی مخلوط می‌شوند.
+    */
+
+    for (let i = list.length - 1; i > 0; i--) {
+
+        let j = Math.floor(Math.random() * (i + 1));
+
+        [list[i], list[j]] = [list[j], list[i]];
+
+    }
+
+
+    /*
+       150 سوال انتخاب می‌کنیم.
+    */
+
+    return list.slice(0, TOTAL_STAGES);
+}
+
+
+/* شروع بازی */
+function startGame() {
+
+    const input = document.getElementById("playerName");
+
+    playerName = input.value.trim();
+
+    if (playerName === "") {
+
+        alert("لطفاً ابتدا نام دانش‌آموز را وارد کنید.");
+
+        input.focus();
+
+        return;
+    }
+
+    stage = 1;
+    score = 0;
+    lives = 3;
+
+    questions = createQuestions();
+
+    showScreen("gameScreen");
+
+    updateStats();
+
+    showQuestion();
+}
+
+
+/* نمایش صفحه */
+function showScreen(id) {
+
+    document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.remove("active");
+    });
+
+    document.getElementById(id).classList.add("active");
+}
+
+
+/* نمایش سوال */
+function showQuestion() {
+
+    if (stage > TOTAL_STAGES) {
+
+        finishGame();
+
+        return;
+    }
+
+    const q = questions[stage - 1];
+
+    currentAnswer = q.answer;
+
+    document.getElementById("question").textContent = q.text;
+
+    document.getElementById("answer").value = "";
+
+    document.getElementById("message").textContent = "";
+
+    document.getElementById("message").className = "message";
+
+    document.getElementById("answer").focus();
+
+    updateStats();
+}
+
+
+/* بررسی پاسخ */
+function checkAnswer() {
+
+    const input = document.getElementById("answer");
+
+    const value = Number(input.value);
+
+    if (input.value.trim() === "") {
+
+        input.focus();
+
+        return;
+    }
+
+
+    if (value === currentAnswer) {
+
+        correctAnswer();
+
+    } else {
+
+        wrongAnswer();
+
+    }
+
+}
+
+
+/* پاسخ درست */
+function correctAnswer() {
+
+    score += 10;
+
+    const message = document.getElementById("message");
+
+    message.textContent = "🎉 آفرین! پاسخ درست بود! +۱۰ امتیاز ⭐";
+
+    message.className = "message correct";
+
+    playCorrectSound();
+
+    stage++;
+
+    updateStats();
+
+
+    setTimeout(() => {
+
+        showQuestion();
+
+    }, 650);
+
+}
+
+
+/* پاسخ غلط */
+function wrongAnswer() {
+
+    lives--;
+
+    const message = document.getElementById("message");
+
+    message.textContent =
+        "🙂 اشکالی ندارد! یک جان کم شد. دوباره تلاش کن!";
+
+    message.className = "message wrong";
+
+    playWrongSound();
+
+    updateStats();
+
+
+    if (lives <= 0) {
+
+        setTimeout(() => {
+
+            finishGame();
+
+        }, 800);
+
+    } else {
+
+        setTimeout(() => {
+
+            showQuestion();
+
+        }, 800);
+
+    }
+
+}
+
+
+/* آمار */
+function updateStats() {
+
+    document.getElementById("stage").textContent =
+        Math.min(stage, TOTAL_STAGES) + " / " + TOTAL_STAGES;
+
+    document.getElementById("score").textContent = score;
+
+    document.getElementById("lives").textContent =
+        "❤️".repeat(lives) + "🖤".repeat(3 - lives);
+
+    const percent =
+        ((stage - 1) / TOTAL_STAGES) * 100;
+
+    document.getElementById("progressBar").style.width =
+        Math.min(percent, 100) + "%";
+}
+
+
+/* پایان بازی */
+function finishGame() {
+
+    showScreen("finishScreen");
+
+    document.getElementById("finalScore").textContent = score;
+
+    if (stage > TOTAL_STAGES) {
+
+        document.getElementById("finishTitle").textContent =
+            "🏆 فوق‌العاده بود!";
+
+        document.getElementById("finishMessage").textContent =
+            playerName +
+            " عزیز، تمام ۱۵۰ مرحله را با موفقیت تمام کردی! 🚀";
+
+    } else {
+
+        document.getElementById("finishTitle").textContent =
+            "👏 خسته نباشی قهرمان!";
+
+        document.getElementById("finishMessage").textContent =
+            playerName +
+            " عزیز، این بار تا مرحله " +
+            stage +
+            " پیش رفتی. دوباره تلاش کن! 💪";
+
+    }
+
+    records.push({
+        name: playerName,
+        score: score,
+        stage: Math.min(stage, TOTAL_STAGES)
+    });
+
+    saveRecords();
+
+    showRecords();
+
+    if (stage > TOTAL_STAGES) {
+
+        playVictorySound();
+
+    }
+
+}
+
+
+/* شروع دوباره */
+function restartGame() {
+
+    showScreen("startScreen");
+
+    document.getElementById("playerName").value = playerName;
+
+}
+
+
+/* کلید Enter */
+function handleEnter(event) {
+
+    if (event.key === "Enter") {
+
+        event.preventDefault();
+
+        checkAnswer();
+
+    }
+
+}
+
+
+/* صدا برای پاسخ درست */
+function playCorrectSound() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        const audio = new AudioContext();
+
+        const oscillator = audio.createOscillator();
+
+        const gain = audio.createGain();
+
+        oscillator.connect(gain);
+
+        gain.connect(audio.destination);
+
+        oscillator.frequency.value = 700;
+
+        oscillator.type = "sine";
+
+        gain.gain.setValueAtTime(
+            0.001,
+            audio.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.25,
+            audio.currentTime + 0.03
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audio.currentTime + 0.35
+        );
+
+        oscillator.start();
+
+        oscillator.stop(audio.currentTime + 0.35);
+
+    } catch (e) {}
+
+}
+
+
+/* صدا برای پاسخ غلط */
+function playWrongSound() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        const audio = new AudioContext();
+
+        const oscillator = audio.createOscillator();
+
+        const gain = audio.createGain();
+
+        oscillator.connect(gain);
+
+        gain.connect(audio.destination);
+
+        oscillator.frequency.value = 180;
+
+        oscillator.type = "triangle";
+
+        gain.gain.setValueAtTime(
+            0.001,
+            audio.currentTime
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.20,
+            audio.currentTime + 0.03
+        );
+
+        gain.gain.exponentialRampToValueAtTime(
+            0.001,
+            audio.currentTime + 0.35
+        );
+
+        oscillator.start();
+
+        oscillator.stop(audio.currentTime + 0.35);
+
+    } catch (e) {}
+
+}
+
+
+/* صدای پیروزی */
+function playVictorySound() {
+
+    try {
+
+        const AudioContext =
+            window.AudioContext ||
+            window.webkitAudioContext;
+
+        const audio = new AudioContext();
+
+        const notes = [523, 659, 784, 1046];
+
+        notes.forEach((frequency, index) => {
+
+            const oscillator = audio.createOscillator();
+
+            const gain = audio.createGain();
+
+            oscillator.connect(gain);
+
+            gain.connect(audio.destination);
+
+            oscillator.frequency.value = frequency;
+
+            oscillator.type = "sine";
+
+            const start =
+                audio.currentTime + index * 0.15;
+
+            gain.gain.setValueAtTime(0.001, start);
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.22,
+                start + 0.03
+            );
+
+            gain.gain.exponentialRampToValueAtTime(
+                0.001,
+                start + 0.25
+            );
+
+            oscillator.start(start);
+
+            oscillator.stop(start + 0.27);
+
+        });
+
+    } catch (e) {}
+
+}
+
+
+/* ذخیره رکوردها */
+function saveRecords() {
+
+    records.sort((a,b) => b.score - a.score);
+
+    records = records.slice(0, 10);
+
+}
+
+
+/* نمایش رکوردها */
+function showRecords() {
+
+    const body =
+        document.getElementById("recordsBody");
+
+    if (records.length === 0) {
+
+        body.innerHTML =
+            `<tr>
+                <td colspan="4" class="empty">
+                    هنوز رکوردی ثبت نشده است.
+                </td>
+            </tr>`;
+
+        return;
+    }
+
+
+    body.innerHTML = records.map((r, index) => {
+
+        return `
+            <tr>
+                <td>${index + 1}</td>
+                <td>${escapeHTML(r.name)}</td>
+                <td>⭐ ${r.score}</td>
+                <td>${r.stage} / 150</td>
+            </tr>
+        `;
+
+    }).join("");
+
+}
+
+
+/* جلوگیری از ورود HTML در نام */
+function escapeHTML(text) {
+
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+}
+
+
+/* نمایش اولیه جدول رکورد */
+showRecords();
+
+</script>
+
+</body>
+</html>
